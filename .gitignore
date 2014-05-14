@@ -1,6 +1,6 @@
 */.build
-*/*.txt
+*.txt
 */template.cpp
-*/*.in
-*/*.out
-*/*.ok
+*.in
+*.out
+*.ok
