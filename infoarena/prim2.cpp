@@ -83,27 +83,6 @@ inline void nod_apm(int x)
 		}
 	}
 }
-inline void citire()
-{
-	int a, b, cost;
-	ifstream fin("apm.in");
-	fin >> n >> m;
-	for (int i = 0; i < m; i++)
-	{
-		fin >> a >> b >> cost;
-		g[a].push_back(pair<int, int>(b, cost));
-		g[b].push_back(pair<int, int>(a, cost));
-	}
-	fin.close();
-}
-inline void scriere()
-{
-	ofstream fout("apm.out");
-	fout << cost_apm << '\n' << apm.size() << '\n';
-	for (int i = 0; i < apm.size(); i++)
-		fout << apm[i].first << ' ' << apm[i].second << '\n';
-	fout.close();
-}
 inline void prim(int s)
 {
 	for (int i = 2; i <= n; i++)
@@ -127,11 +106,32 @@ inline void prim(int s)
 	for (int mi = 1; mi < n; mi++)
 		nod_apm(heap_top());
 }
-int main()
-{
-	citire();
-	prim(1);
-	scriere();
+int main() {
+	freopen("apm.in", "r", stdin);
+	freopen("apm.out", "w", stdout);
+
+	scanf("%d %d", &n, &m);
+	for (int i = 0; i < m; i++) {
+		int u, v, w;
+		scanf("%d %d %d", &u, &v, &w);
+		g[u].push_back(make_pair(v, w));
+		g[v].push_back(make_pair(u, w));
+	}
+
+	for (int i = 2; i <= n; i++) {
+		heap_id[i] = -1;
+		d[i] = infty;
+		p[i] = 0;
+		heap_push(i);
+	}
+	d[1] = 0;
+	p[1] = 0;
+
+
+	printf("%d\n%d\n", mst_weight, mst.size());
+	for (int i = 0; i < (int)mst.size(); i++)
+		printf("%d %d\n", mst[i].first, mst[i].second);
+
 	return 0;
 }
 

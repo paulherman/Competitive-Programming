@@ -12,17 +12,11 @@ ofstream fout;
 short int n;
 int permutare[9];
 
-inline void citire()
-{
-	ifstream fin("permutari.in");
-	fin >> n;
-	fin.close();	
-}
 inline void scriere()
 {
 	for (int i = 0; i < n; i++)
-		fout << permutare[i] << ' ';
-	fout << '\n';
+		printf("%d ", permutare[i]);
+	printf("\n");
 }
 inline bool verificare(int k, int v)
 {
@@ -38,10 +32,8 @@ void backtracking(int k)
 	else
 	{
 		//Parcurgem toate valorile posibile
-		for (int i = 1; i <= n; i++)
-		{
-			if (verificare(k, i) == true)
-			{
+		for (int i = 1; i <= n; i++) {
+			if (verificare(k, i) == true) {
 				permutare[k] = i;
 				backtracking(k + 1);
 			}
@@ -50,10 +42,13 @@ void backtracking(int k)
 }
 int main()
 {
-	citire();
-	fout.open("permutari.out");
+	freopen("permutari.in", "r", stdin);
+	freopen("permutari.out", "w", stdout);
+
+	scanf("%d", &n);
+
 	backtracking(0);
-	fout.close();
+
 	return 0;
 }
 

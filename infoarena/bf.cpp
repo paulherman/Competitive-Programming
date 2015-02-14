@@ -1,72 +1,60 @@
-/*
- * Autor: Paul Herman
- * Problema: Bellman-Ford(n*m)
- * Data: 01.10.2011
- * Punctaj: 100
- * Link: http://www.infoarena.ro/problema/dijkstra
- */
-#include <fstream>
+#include <cstdio>
+#include <utility>
+#include <queue>
+#include <vector>
 using namespace std;
 
-struct muchie
-{
-	int cost; //Costul pentru a ajunge de la A la B
-	unsigned short int a; //Nodul A
-	unsigned short int b; //Nodul B
-};
 
-#define INFINIT 0x3f3f3f
+const int infty = 0x3f3f3f;
+int dist[50005], n, m;
+bool in_queue[50005];
+queue<int> q;
+vector< pair<int, int> > adj[50005];
 
-unsigned int noduri[50001]; //Costul pt. a ajunge la fiecare nod
-muchie muchii[250001]; //Muchiile grafului
-unsigned short int n; //Numarul de noduri
-unsigned int m; //Nr. de muchii
+int main() {
+	freopen("dijkstra.in", "r", stdin);
+	freopen("dijkstra.out", "w", stdout);
 
-void citire()
-{
-	ifstream fin("dijkstra.in");
-	fin >> n >> m;
-	for (unsigned int i = 1; i <= m ; i++)
-		fin >> muchii[i].a >> muchii[i].b >> muchii[i].cost;
-	fin.close();
-}
-void scriere()
-{
-	ofstream fout("dijkstra.out");
-	for (unsigned short int i = 2; i <= n; i++)
-	{
-		if (noduri[i] < INFINIT)
-			fout << noduri[i] << " ";
-		else
-			fout << "0 ";
+	scanf("%d %d", &n, &m);
+	for (int i = 0; i < m; i++) {
+		int u, v, cost;
+		scanf("%d %d %d", &u, &v, &cost);
+		adj[u].push_back(make_pair(v, cost));
+		adj[v].push_back(make_pair(u, cost));
 	}
-	fout.close();
-}
-void BF()
-{
-	bool relaxeaza = true;
-	noduri[1] = 0; //Costul pt. a ajunge la sursa e 0
-	for (unsigned short int i = 2; i <= n; i++)
-		noduri[i] = INFINIT; //Costul pt. a ajunge la restul nodurilor e infinit
-	for (unsigned short int i = 1; (i <= n) && (relaxeaza == true); i++)
-	{
-		//Parcurgem toate nodurile daca am avut vreo relaxare
-		relaxeaza = false; //Presupunem ca nu se face nici o relaxare
-		for (unsigned int j = 1; j <= m; j++) //Parcurgem toate muchiile
-		{
-			if ((noduri[muchii[j].a] + muchii[j].cost) < noduri[muchii[j].b])
-			{
-				//Relaxam muchiile
-				noduri[muchii[j].b] = noduri[muchii[j].a] + muchii[j].cost;
-				relaxeaza = true;
+
+	for (int i = 1; i <= n; i++)
+		dist[i] = oo;
+
+	dist[1] = 0;
+	q.push(1);
+	in_queue[1] = true;
+
+	while (q.empty() == false) {
+		int u = q.front();
+		q.pop();
+		in_queue[u] = false;
+
+		for (int i = 0; i < (int)adj[u].size(); i++) {
+			int v = adj[u][i].first;
+			int weight = adj[u][i].second;
+
+			if (dist[u] + weight < dist[v]) {
+				dist[v] = dist[u] + weight;
+				if (in_queue[v] == false) {
+					q.push(v);
+					in_queue[v] = true;
+				}
 			}
 		}
 	}
-}
-int main()
-{
-	citire();
-	BF();
-	scriere();
+
+
+	for (int i = 2; i <= n; i++) {
+		if (dist[i] == infty)
+			dist[i] = 0;
+		printf("%d ", dist[i]);
+	}
+
 	return 0;
 }

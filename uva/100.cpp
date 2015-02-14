@@ -28,7 +28,6 @@ uint count(uint n) {
 
 int main()
 {
-	//freopen("input.txt", "r", stdin);
 	uint a, b, cycleMax, aCopy, bCopy;
 	while (scanf("%d %d", &a, &b) != EOF) {
 		aCopy = a;
